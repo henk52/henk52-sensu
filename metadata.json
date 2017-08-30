@@ -1,0 +1,14 @@
+{
+  "name": "henk52-sensu",
+  "version": "0.1.0",
+  "author": "henk52",
+  "summary": "Install Sensu core with uchiwa. and client.",
+  "license": "Apache-2.0",
+  "source": ".",
+  "project_page": "https://github.com/henk52/henk52-sensu",
+  "issues_url": "https://github.com/henk52/henk52-sensu/issues",
+  "dependencies": [
+    {"name":"puppetlabs-stdlib","version_requirement":">= 1.0.0"}
+  ]
+}
+
