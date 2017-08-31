@@ -6,6 +6,8 @@ package {'nagios-plugins-procs': ensure => present }
 package {'nagios-plugins-users': ensure => present }
 package {'nagios-plugins-uptime': ensure => present }
 package {'nagios-plugins-sensors': ensure => present }
+package {'nagios-plugins-ssh': ensure => present }
+package {'nagios-plugins-by_ssh': ensure => present }
 
 
 file {'/etc/sensu/conf.d/rabbitmq.json':
@@ -57,5 +59,19 @@ service { 'sensu-client':
   ensure  => running,
   enable  => true,
   require => File['/usr/lib/systemd/system/sensu-client.service'],
+}
+
+file { '/etc/sensu/test_ssh_authentication.pl':
+  ensure  => present,
+  mode    => "755",
+  content => '#!/usr/bin/perl -w
+use strict;
+my $nReturnCode = system(" /usr/lib64/nagios/plugins/check_by_ssh  @ARGV");
+my $nStatus = $nReturnCode >> 8;
+if ( $nStatus == 3 ) {
+  $nStatus = 2;
+}
+exit($nStatus);',
+  require => Package['sensu'],
 }
 
