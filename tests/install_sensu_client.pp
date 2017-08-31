@@ -23,19 +23,24 @@ file {'/etc/sensu/conf.d/rabbitmq.json':
   notify  => Service['sensu-client'],
 }
 
-file { '/etc/sensu/conf.d/client.json':
-  ensure => present,
-  content => '{
+#    "address": "<%= @ipaddress_enp3s0f0 =%>",
+$client_json_template = @(END)
+{
   "client": {
-    "name": "this-client",
-    "address": "10.11.12.13",
+    "name": "<%= @hostname %>",
+    "address": "<%= @ipaddress_enp3s0f0 %>",
     "environment": "development",
     "subscriptions": [
       "rhel",
       "bldsrv"
     ]
   }
-}',
+}
+END
+
+file { '/etc/sensu/conf.d/client.json':
+  ensure => present,
+  content => inline_template($client_json_template),
   require => Package['sensu'],
   notify  => Service['sensu-client'],
 }
