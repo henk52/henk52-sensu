@@ -33,8 +33,8 @@ $client_json_template = @(END)
     "address": "<%= @ipaddress_enp3s0f0 %>",
     "environment": "development",
     "subscriptions": [
-      "rhel",
-      "bldsrv"
+      "rhel-hosts",
+      "hp-hw"
     ]
   }
 }
@@ -75,3 +75,9 @@ exit($nStatus);',
   require => Package['sensu'],
 }
 
+# The newline is required to make it a valid sudoers entry.
+file { '/etc/sudoers.d/sensu':
+  ensure => present,
+  content => 'sensu ALL=(ALL) NOPASSWD:/usr/bin/cciss_vol_status
+',
+}
